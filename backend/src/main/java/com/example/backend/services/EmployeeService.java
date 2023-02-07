@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,25 +27,18 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public ResponseEntity<Object> UploadFile(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.getAllEmployees();
+    }
 
-        List<Employee> employees = new ArrayList<Employee>();
+    public ResponseEntity<Object> uploadFile(MultipartFile file) {
+        List<Employee> employees = new ArrayList<>();
 
         try {
-            assert fileName != null;
-            String extension = FileManager.getFileExtension(fileName);
-
-            if (!extension.equals("csv")) {
-                throw new IllegalArgumentException("Only csv files are accepted.");
+            if (!FileManager.checkIfFileIsCsv(file)) {
+                return new ResponseEntity<>("Not a CSV file", HttpStatus.BAD_REQUEST);
             }
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        try {
-            BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
             CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()));
 
             List<String[]> data = csvReader.readAll();
@@ -59,12 +51,13 @@ public class EmployeeService {
                 employees.add(new Employee(UUID.randomUUID(), employee[0], employee[1], employee[2]));
             }
 
-            for (Employee employee : employees) {
-                System.out.println(employee.getId() + " " + employee.getName() + " " + employee.getEmail() + " " + employee.getPhoneNumber() + " ");
-            }
-
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        employeeRepository.clearDatabase();
+        for (Employee employee : employees) {
+            employeeRepository.createEmployee(employee);
         }
 
         return ResponseEntity.ok("File uploaded successfully.");
