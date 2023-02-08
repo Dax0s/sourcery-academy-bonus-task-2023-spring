@@ -1,10 +1,12 @@
+import styles from "./EmployeeTable.module.scss";
+
 type Props = {
     data: any
 }
 
 const EmployeeTable = ({ data }: Props) => {
     return (
-        <table>
+        <table className={styles.container}>
             <thead>
                 <tr>
                     <th>Name</th>

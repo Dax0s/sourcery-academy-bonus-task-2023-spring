@@ -1,0 +1,14 @@
+.container {
+    border: 1px solid black;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 2rem 3rem;
+}
+
+th {
+    background-color: #aaaaaa;
+    color: #fff;
+}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
+import styles from "./FileInput.module.scss";
 
 type Props = {
     onPost: Function
@@ -34,8 +35,11 @@ const FileInput = ({ onPost }: Props) => {
     }
 
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
+        <div className={styles.container}>
+            <label>
+                {(file && file.name) || "Select file..."}
+                <input type="file" onChange={handleFileChange} />
+            </label>
             <button onClick={handleUploadClick}>Upload</button>
         </div>
     );
