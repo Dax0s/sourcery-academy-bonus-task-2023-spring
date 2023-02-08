@@ -8,7 +8,7 @@ public class FileManager {
         int dotIndex = fileName.lastIndexOf(".");
 
         if (dotIndex == -1) {
-            throw new IllegalArgumentException("Not a legal file.");
+            throw new IllegalArgumentException("Not a legal file name.");
         }
 
         return fileName.substring(dotIndex + 1);

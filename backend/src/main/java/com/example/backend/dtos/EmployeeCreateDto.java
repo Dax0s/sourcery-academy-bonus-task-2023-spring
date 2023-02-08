@@ -1,12 +1,10 @@
 package com.example.backend.dtos;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class EmployeeCreateDto {
     private String name;
     private String email;

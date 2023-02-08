@@ -31,20 +31,30 @@ public class EmployeeService {
         return employeeRepository.getAllEmployees();
     }
 
+    public void createEmployee(Employee employee) {
+        employeeRepository.createEmployee(employee);
+    }
+
+    public void createEmployee(List<Employee> employees) {
+        for (Employee employee : employees) {
+            employeeRepository.createEmployee(employee);
+        }
+    }
+
     public ResponseEntity<Object> uploadFile(MultipartFile file) {
         List<Employee> employees = new ArrayList<>();
 
         try {
             if (!FileManager.checkIfFileIsCsv(file)) {
-                return new ResponseEntity<>("Not a CSV file", HttpStatus.BAD_REQUEST);
+                throw new IllegalArgumentException("Not a CSV file");
             }
 
             CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()));
-
             List<String[]> data = csvReader.readAll();
 
+            int amountOfColumnsRequired = 3;
             for (String[] employee : data) {
-                if (employee.length != 3) {
+                if (employee.length != amountOfColumnsRequired) {
                     throw new IllegalArgumentException("Bad CSV file.");
                 }
 
@@ -56,10 +66,8 @@ public class EmployeeService {
         }
 
         employeeRepository.clearDatabase();
-        for (Employee employee : employees) {
-            employeeRepository.createEmployee(employee);
-        }
+        createEmployee(employees);
 
-        return ResponseEntity.ok("File uploaded successfully.");
+        return new ResponseEntity<>("File uploaded successfully.", HttpStatus.OK);
     }
 }
