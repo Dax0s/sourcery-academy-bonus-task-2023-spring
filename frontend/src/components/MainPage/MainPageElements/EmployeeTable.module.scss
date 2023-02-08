@@ -6,9 +6,17 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     padding: 2rem 3rem;
+
+    @media (max-width: 40rem) {
+        padding: 0.2rem 0.35rem;
+    }
 }
 
 th {
-    background-color: #aaaaaa;
+    background-color: #969595;
     color: #fff;
+}
+
+tr:first-of-type > td {
+    background-color: #e4e3e3;
 }
