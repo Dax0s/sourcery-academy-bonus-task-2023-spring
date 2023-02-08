@@ -52,7 +52,10 @@ public class EmployeeService {
 
             int amountOfColumnsRequired = 3;
             for (String[] employee : data) {
-                if (employee.length != amountOfColumnsRequired) {
+                if (employee.length == 1 && employee[0].equals("")) {
+                    continue;
+                } else if (employee.length != amountOfColumnsRequired) {
+                    System.out.println(employee.length);
                     throw new IllegalArgumentException("Bad CSV file.");
                 }
 
