@@ -36,8 +36,8 @@ const FileInput = ({ onPost }: Props) => {
         .then((res) => {
             onPost();
 
-            console.log(res);
             setSuccessMessage(res.data);
+
             setErrorOpen(false);
             setSuccessOpen(true);
         })
