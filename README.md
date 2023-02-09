@@ -12,7 +12,7 @@ There are two ways to run the backend:
 
 ### Frontend
 
-* First of all install all the dependencies by running `npm install` in the frontend folder  
+* First of all install all dependencies by running `npm install` in the frontend folder  
 * Then in the same terminal type `npm run start`
 
 The app will be running on `localhost:3000`
