@@ -9,8 +9,10 @@ type Props = {
 
 const FileInput = ({ onPost }: Props) => {
     const [file, setFile] = useState<File>();
-    const [open, setOpen] = useState(false);
+    const [errorOpen, setErrorOpen] = useState(false);
+    const [successOpen, setSuccessOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -31,28 +33,42 @@ const FileInput = ({ onPost }: Props) => {
                 "Content-Type": "multipart/form-data"
             }
         })
-        .then(() => {
+        .then((res) => {
             onPost();
+
+            console.log(res);
+            setSuccessMessage(res.data);
+            setErrorOpen(false);
+            setSuccessOpen(true);
         })
-        .catch((e) => {
-            setErrorMessage(e.response.data);
-            setOpen(true);
+        .catch((res) => {
+            setErrorMessage(res.response.data);
+
+            setSuccessOpen(false);
+            setErrorOpen(true);
         });
     }
 
     const handleClose = () => {
-        setOpen(false);
+        setErrorOpen(false);
+        setSuccessOpen(false);
     }
 
     return (
         <div className={styles.container}>
-            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+            <Snackbar open={errorOpen} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                     {errorMessage}
                 </Alert>
             </Snackbar>
+
+            <Snackbar open={successOpen} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    {successMessage}
+                </Alert>
+            </Snackbar>
             <label>
-                {(file && ((file.name.length > 22 && (file.name.substring(0, 22) + "...")) || file.name)) || "Select file..."}
+                {(file && ((file.name.length > 20 && (file.name.substring(0, 20) + "...")) || file.name)) || "Select file..."}
                 <input type="file" onChange={handleFileChange} />
             </label>
             <button className={styles.upload_button} onClick={handleUploadClick}>Upload</button>
