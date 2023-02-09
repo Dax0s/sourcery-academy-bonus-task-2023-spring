@@ -52,7 +52,7 @@ const FileInput = ({ onPost }: Props) => {
                 </Alert>
             </Snackbar>
             <label>
-                {(file && file.name) || "Select file..."}
+                {(file && ((file.name.length > 22 && (file.name.substring(0, 22) + "...")) || file.name)) || "Select file..."}
                 <input type="file" onChange={handleFileChange} />
             </label>
             <button className={styles.upload_button} onClick={handleUploadClick}>Upload</button>
