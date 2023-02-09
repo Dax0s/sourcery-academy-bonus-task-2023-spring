@@ -19,18 +19,18 @@
             background-color: #e7e6e6;
         }
     }
+}
 
-    button {
-        border: 2px solid black;
-        width: 9rem;
-        height: 3rem;
-        background-color: #9af3ff;
-        font-size: 1.5rem;
+.upload_button {
+    border: 2px solid black;
+    width: 9rem;
+    height: 3rem;
+    background-color: #9af3ff;
+    font-size: 1.5rem;
 
-        &:hover,
-        &:active {
-            cursor: pointer;
-            background-color: darken(#9af3ff, 10%);
-        }
+    &:hover,
+    &:active {
+        cursor: pointer;
+        background-color: darken(#9af3ff, 10%);
     }
 }

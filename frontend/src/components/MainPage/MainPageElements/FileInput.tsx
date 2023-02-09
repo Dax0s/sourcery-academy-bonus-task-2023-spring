@@ -1,3 +1,4 @@
+import { Alert, Snackbar } from "@mui/material";
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import styles from "./FileInput.module.scss";
@@ -8,6 +9,8 @@ type Props = {
 
 const FileInput = ({ onPost }: Props) => {
     const [file, setFile] = useState<File>();
+    const [open, setOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -31,16 +34,28 @@ const FileInput = ({ onPost }: Props) => {
         .then(() => {
             onPost();
         })
-        .catch(console.log);
+        .catch((e) => {
+            setErrorMessage(e.response.data);
+            setOpen(true);
+        });
+    }
+
+    const handleClose = () => {
+        setOpen(false);
     }
 
     return (
         <div className={styles.container}>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <label>
                 {(file && file.name) || "Select file..."}
                 <input type="file" onChange={handleFileChange} />
             </label>
-            <button onClick={handleUploadClick}>Upload</button>
+            <button className={styles.upload_button} onClick={handleUploadClick}>Upload</button>
         </div>
     );
 }
